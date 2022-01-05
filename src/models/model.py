@@ -1,24 +1,25 @@
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
+
 
 class MyAwesomeModel(nn.Module):
-    '''
-    A 2D convolutional network. 
-    
-    We use convolutional layers because they are known to be 
+    """
+    A 2D convolutional network.
+
+    We use convolutional layers because they are known to be
     translational invariant, which is relevant as we work with
-    rotated corrupted data. 
-    '''
+    rotated corrupted data.
+    """
     def __init__(self):
         super().__init__()
 
         # Input layer.
-        self.conv1 = nn.Conv2d(1, 10, kernel_size = 5)
-        
+        self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
+
         # Hidden layer(s)
-        self.conv2 = nn.Conv2d(10, 20, kernel_size = 5)
+        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
         self.fc1 = nn.Linear(320, 50)
-        
+
         # Output layer
         self.output = nn.Linear(50, 10)
 
@@ -26,17 +27,29 @@ class MyAwesomeModel(nn.Module):
         self.dropout = nn.Dropout(p=0.2)
 
     def forward(self, x):
+        """
+        Forward passes the input through multiple convolutional
+        and fully connected layers.
+
+            Parameters:
+                x: Input values from a 28x28 picture given in
+                grayscale (1 channel)
+
+            Returns:
+                x: Output of the neural network given the input
+                and the current parameters
+        """
         # Convolutional and maxpoolinf
-        x = F.relu(F.max_pool2d(self.conv1(x),2))
-        x = F.relu(F.max_pool2d(self.conv2(x),2))
-        
+        x = F.relu(F.max_pool2d(self.conv1(x), 2))
+        x = F.relu(F.max_pool2d(self.conv2(x), 2))
+
         # Flatten for fully connected (fc) layers
         x = x.view(-1, 320)
 
         #  Using dropout on fc layers
         x = self.dropout(F.relu(self.fc1(x)))
-        
-        # Forward the output layer. 
-        x = F.log_softmax(self.output(x), dim = 1)
+
+        # Forward the output layer.
+        x = F.log_softmax(self.output(x), dim=1)
 
         return x
