@@ -31,11 +31,13 @@ def main(input_filepath, output_filepath):
         output = (tensor - mu) / std
         return output
 
-    # Combine .npz files
+    # Find training data
+    files = os.listdir(input_filepath)
     data_all = [
-        np.load(os.path.join(input_filepath, "train_%s.npz" % i)) for i in range(5)
+        np.load(f) for f in files if f.endswith('.npz') and 'train' in f
     ]
     
+    # Combine .npz files
     merged_data = dict(data_all[0])
     for data in data_all[1:]:
         for k in data.keys():
