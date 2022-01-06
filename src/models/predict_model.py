@@ -1,17 +1,26 @@
+from logging import raiseExceptions
 import click
 import torch
+from torch.jit import Error
 from model import MyAwesomeModel
 from torch.utils.data import DataLoader, TensorDataset
-
+import numpy as np
 
 # We use click for to pass which model we want to load in
 @click.command()
 @click.argument("load_model_from", type=click.Path(exists=True))
-def main(load_model_from):
+@click.argument("data_images", type=click.Path(exists=True))
+def main(load_model_from, data_images):
     """
     Tests the given model using the standard testset
     """
     print("Evaluating until hitting the ceiling")
+
+    def normalize(tensor):
+        mu = torch.mean(tensor)
+        std = torch.std(tensor)
+        output = (tensor - mu) / std
+        return output
 
     # First we load in the already trained model
     model = MyAwesomeModel()
@@ -19,11 +28,16 @@ def main(load_model_from):
     model.load_state_dict(state_dict)
 
     # Load in the test set given arguments
-    # (TODO: Make more versatile - extend to different formats)
-    testset = TensorDataset(
-        torch.load("data/processed/images_test.pt"),
-        torch.load("data/processed/labels_test.pt"),
-    )
+    if not data_images.lower().endswith('.npz'):
+        raise Exception("Only accepts .npz files")
+    else:
+        test = np.load(data_images)
+        print(test)
+        testset = TensorDataset(
+            normalize(torch.Tensor(test.f.images)),
+            torch.Tensor(test.f.labels).type(torch.LongTensor),
+        )
+
     test_set = DataLoader(testset, batch_size=64, shuffle=True)
 
     model.eval()

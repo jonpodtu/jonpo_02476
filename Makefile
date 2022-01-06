@@ -35,7 +35,7 @@ train:
 
 ## Make Train
 test: 
-	$(PYTHON_INTERPRETER) src/models/predict_model.py models/trained_model.pt
+	$(PYTHON_INTERPRETER) src/models/predict_model.py models/trained_model.pt data/processed/test.npz
 
 ## Delete all compiled Python files
 clean:

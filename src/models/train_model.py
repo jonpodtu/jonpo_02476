@@ -3,6 +3,7 @@ import torch
 from model import MyAwesomeModel
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
+import os
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
         torch.load("data/processed/labels_train.pt"),
     )
     train_set = DataLoader(trainset, batch_size=64, shuffle=True)
-
+    print("The trainingset is {} long!".format(len(trainset)))
     # Criterion: We use the negative log likelihood as our output is logSoftMax
     criterion = torch.nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.01)
@@ -53,8 +54,10 @@ def main():
         train_loss.append(loss.item())
         print("[%d] loss: %.3f" % (e + 1, running_loss / len(train_set)))
 
-    torch.save(model.state_dict(), "models/trained_model.pt")
+    os.makedirs("models", exist_ok=True)
+    torch.save(model.state_dict(), 'models/trained_model.pt')
 
+    os.makedirs("reports/figures", exist_ok=True)  
     plt.plot(train_loss, label="Training loss")
     plt.legend()
     plt.xlabel("Epoch")

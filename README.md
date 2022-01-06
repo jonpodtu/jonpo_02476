@@ -1,7 +1,11 @@
 02476_ex1
 ==============================
 
-First exercise of 02476 course
+TODO:
+[] Make ```predic_model.py``` more flexible. (Use numpy or pickle)
+[] Task 8-11 in "M6 - Code structure"
+    [] Visualizations
+    [] Update ```README.md```
 
 Project Organization
 ------------

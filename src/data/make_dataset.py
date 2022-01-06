@@ -2,6 +2,7 @@
 import logging
 import os
 from pathlib import Path
+from shutil import copyfile
 
 import click
 import numpy as np
@@ -34,29 +35,31 @@ def main(input_filepath, output_filepath):
     data_all = [
         np.load(os.path.join(input_filepath, "train_%s.npz" % i)) for i in range(5)
     ]
-    merged_data = {}
-    for data in data_all:
-        [merged_data.update({k: v}) for k, v in data.items()]
+    
+    merged_data = dict(data_all[0])
+    for data in data_all[1:]:
+        for k in data.keys():
+            merged_data[k] = np.vstack((merged_data[k], dict(data)[k]))
+    merged_data['labels'] = np.reshape(merged_data['labels'], merged_data['labels'].size)
 
     # TODO: Clean up
     np.savez(os.path.join(output_filepath, "train_data.npz"), **merged_data)
 
-    # Load in the test and train file
+    # Load in the train file
     train = np.load(os.path.join(output_filepath, "train_data.npz"))
-    test = np.load(os.path.join(input_filepath, "test.npz"))
-
+    
     # Now we organize into tenzors and normalize dem
     images_train = normalize(torch.Tensor(train.f.images))
     labels_train = torch.Tensor(train.f.labels).type(torch.LongTensor)
-    images_test = normalize(torch.Tensor(test.f.images))
-    labels_test = torch.Tensor(test.f.labels).type(torch.LongTensor)
 
     # Save the individual tensors
     torch.save(images_train, os.path.join(output_filepath, "images_train.pt"))
     torch.save(labels_train, os.path.join(output_filepath, "labels_train.pt"))
-    torch.save(images_test, os.path.join(output_filepath, "images_test.pt"))
-    torch.save(labels_test, os.path.join(output_filepath, "labels_test.pt"))
 
+    # Pass test data through to output
+    copyfile(os.path.join(input_filepath, "test.npz"),
+             os.path.join(output_filepath, "test.npz"))
+    
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
