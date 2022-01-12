@@ -1,8 +1,12 @@
-02476_ex1
+02476 Exercises
 ==============================
 
+This project mainly consists of two parts:
+- Individual daily exercises, which all can be found in the ```daily_exercises``` folder
+- Final exercises which mainly concerns the MNIST task has been expanded on day to day basis. Essentially, this uses all the files OUTSIDE of the ```daily_exercises``` folder. 
+  - The requirement.txt file is mean for the MNIST task - not the daily exercises
+
 TODO:
-[] Make ```predic_model.py``` more flexible. (Use numpy or pickle)
 [] Task 8-11 in "M6 - Code structure"
     [] Visualizations
     [] Update ```README.md```

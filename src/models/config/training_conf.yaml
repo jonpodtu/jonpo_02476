@@ -1,0 +1,34 @@
+# training_conf.yaml
+hyperparameters:
+  batch_size: 64
+  lr: 0.01
+  epochs: 30
+
+  # Choose between adam and SGD
+  optimizer: 'adam'
+
+paths:
+  images: "data/processed/images_train.pt"
+  labels: "data/processed/labels_train.pt"
+  model_save: "models"
+  figures: "reports/figures"
+
+# Putting the two conf files together to solve issues
+conv1: 
+  in: 1
+  out: 10
+  kernel_size: 5
+
+conv2: 
+  in: 10
+  out: 20
+  kernel_size: 5
+
+fc1: 
+  in: 320
+  out: 50
+  dropout: 0.2
+
+output:
+  in: 50
+  out: 10

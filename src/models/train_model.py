@@ -5,23 +5,36 @@ from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
 import os
 
+import hydra
+from hydra.utils import get_original_cwd, to_absolute_path
+from omegaconf import DictConfig, omegaconf
 
-def main():
-    print("Training day and night")
 
-    model = MyAwesomeModel()
+@hydra.main(config_path="config", config_name="training_conf")
+def main(cfg: DictConfig):
+    print("Training day and night...")
+
+    model = MyAwesomeModel(cfg)
+
     trainset = TensorDataset(
-        torch.load("data/processed/images_train.pt"),
-        torch.load("data/processed/labels_train.pt"),
+        torch.load(to_absolute_path(cfg.paths['images'])),
+        torch.load(to_absolute_path(cfg.paths['labels'])),
     )
-    train_set = DataLoader(trainset, batch_size=64, shuffle=True)
+    train_set = DataLoader(trainset,
+                           batch_size=cfg.hyperparameters['batch_size'],
+                           shuffle=True)
     print("The trainingset is {} long!".format(len(trainset)))
     # Criterion: We use the negative log likelihood as our output is logSoftMax
     criterion = torch.nn.NLLLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    if cfg.hyperparameters['optimizer'].lower() == 'adam':
+        optimizer = optim.Adam(model.parameters(), lr=cfg.hyperparameters['lr'])
+    elif cfg.hyperparameters['optimizer'].lower() == 'sgd':
+        optimizer = optim.SGD(model.parameters(), lr=cfg.hyperparameters['lr'])
+    else:
+        print('Not a valid optimizer! Please choose \"adam\" or \"sgd\".')
 
     # Epochs and train_loss
-    epochs = 30
+    epochs = cfg.hyperparameters['epochs']
     train_loss = []
 
     for e in range(epochs):
@@ -54,15 +67,18 @@ def main():
         train_loss.append(loss.item())
         print("[%d] loss: %.3f" % (e + 1, running_loss / len(train_set)))
 
-    os.makedirs("models", exist_ok=True)
-    torch.save(model.state_dict(), 'models/trained_model.pt')
+    models_dir = to_absolute_path(cfg.paths['model_save'])
+    os.makedirs(models_dir, exist_ok=True)
+    torch.save(model, 
+               to_absolute_path(os.path.join(models_dir,"trained_model.pt")))
 
-    os.makedirs("reports/figures", exist_ok=True)  
+    fig_dir = to_absolute_path(cfg.paths['figures'])
+    os.makedirs(fig_dir, exist_ok=True)
     plt.plot(train_loss, label="Training loss")
     plt.legend()
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
-    plt.savefig("reports/figures/loss.png")
+    plt.savefig(os.path.join(fig_dir, "loss.png"))
 
 
 if __name__ == "__main__":

@@ -2,7 +2,6 @@ from logging import raiseExceptions
 import click
 import torch
 from torch.jit import Error
-from model import MyAwesomeModel
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 
@@ -10,6 +9,8 @@ import numpy as np
 @click.command()
 @click.argument("load_model_from", type=click.Path(exists=True))
 @click.argument("data_images", type=click.Path(exists=True))
+
+
 def main(load_model_from, data_images):
     """
     Tests the given model using the standard testset
@@ -23,12 +24,10 @@ def main(load_model_from, data_images):
         return output
 
     # First we load in the already trained model
-    model = MyAwesomeModel()
-    state_dict = torch.load(load_model_from)
-    model.load_state_dict(state_dict)
+    model = torch.load(load_model_from)
 
     # Load in the test set given arguments
-    if not data_images.lower().endswith('.npz'):
+    if not data_images.lower().endswith(".npz"):
         raise Exception("Only accepts .npz files")
     else:
         test = np.load(data_images)

@@ -1,6 +1,8 @@
 import torch.nn.functional as F
 from torch import nn
 
+import logging
+log = logging.getLogger(__name__)
 
 class MyAwesomeModel(nn.Module):
     """
@@ -10,21 +12,26 @@ class MyAwesomeModel(nn.Module):
     translational invariant, which is relevant as we work with
     rotated corrupted data.
     """
-    def __init__(self):
+    def __init__(self, cfg):
         super().__init__()
 
         # Input layer.
-        self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
+        self.conv1 = nn.Conv2d(cfg.conv1['in'], 
+                               cfg.conv1['out'], 
+                               kernel_size=cfg.conv1['kernel_size'])
 
         # Hidden layer(s)
-        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
-        self.fc1 = nn.Linear(320, 50)
+        self.conv2 = nn.Conv2d(cfg.conv2['in'], 
+                               cfg.conv2['out'], 
+                               kernel_size=cfg.conv2['kernel_size'])
+        self.fc1_in = cfg.fc1['in']
+        self.fc1 = nn.Linear(self.fc1_in, cfg.fc1['out'])
 
         # Output layer
-        self.output = nn.Linear(50, 10)
+        self.output = nn.Linear(cfg.output['in'], cfg.output['out'])
 
         # Dropout module
-        self.dropout = nn.Dropout(p=0.2)
+        self.dropout = nn.Dropout(p=cfg.fc1['dropout'])
 
     def forward(self, x):
         """
@@ -44,7 +51,7 @@ class MyAwesomeModel(nn.Module):
         x = F.relu(F.max_pool2d(self.conv2(x), 2))
 
         # Flatten for fully connected (fc) layers
-        x = x.view(-1, 320)
+        x = x.view(-1, self.fc1_in)
 
         #  Using dropout on fc layers
         x = self.dropout(F.relu(self.fc1(x)))

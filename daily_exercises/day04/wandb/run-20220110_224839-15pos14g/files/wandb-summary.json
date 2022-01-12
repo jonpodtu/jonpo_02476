@@ -1,0 +1,1 @@
+{"loss": 90.5239997489305, "_runtime": 45, "_timestamp": 1641851364, "_step": 5, "examples": {"_type": "images/separated", "width": 28, "height": 28, "format": "png", "count": 100}, "_wandb": {"runtime": 44}}
