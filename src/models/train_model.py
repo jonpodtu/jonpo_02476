@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import torch
 from hydra.utils import to_absolute_path
 from model import MyAwesomeModel
-from omegaconf import DictConfig, omegaconf
+from omegaconf import DictConfig
 from torch import optim
 from torch.utils.data import DataLoader, TensorDataset
 
