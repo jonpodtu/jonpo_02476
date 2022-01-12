@@ -1,13 +1,12 @@
 import argparse
 import sys
 
+import matplotlib.pyplot as plt
 import torch
+from model import MyAwesomeModel
 from torch import optim
 
-import matplotlib.pyplot as plt
-
 from data import mnist
-from model import MyAwesomeModel
 
 
 class TrainOREvaluate(object):

@@ -11,7 +11,6 @@ from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 from torchvision.utils import save_image
 
-
 # Model Hyperparameters
 dataset_path = 'datasets'
 cuda = torch.cuda.is_available()

@@ -1,13 +1,13 @@
-import matplotlib.pyplot as plt
-import torch
-from model import MyAwesomeModel
-from torch import optim
-from torch.utils.data import DataLoader, TensorDataset
 import os
 
 import hydra
+import matplotlib.pyplot as plt
+import torch
 from hydra.utils import to_absolute_path
+from model import MyAwesomeModel
 from omegaconf import DictConfig, omegaconf
+from torch import optim
+from torch.utils.data import DataLoader, TensorDataset
 
 
 @hydra.main(config_path="config", config_name="training_conf.yaml")

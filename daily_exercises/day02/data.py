@@ -1,8 +1,9 @@
-import torch
-import numpy as np
 import os
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
-from torch.utils.data import TensorDataset, DataLoader
 
 # Define a transform to normalize the data
 transform = transforms.Compose([transforms.ToTensor(),

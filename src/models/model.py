@@ -1,10 +1,12 @@
+import logging
+
 import torch.nn.functional as F
 from torch import nn
 
-import logging
 log = logging.getLogger(__name__)
 import hydra
 from hydra import compose, initialize
+
 
 class MyAwesomeModel(nn.Module):
     """

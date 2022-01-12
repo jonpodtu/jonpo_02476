@@ -1,9 +1,11 @@
 from logging import raiseExceptions
+
 import click
+import numpy as np
 import torch
 from torch.jit import Error
 from torch.utils.data import DataLoader, TensorDataset
-import numpy as np
+
 
 # We use click for to pass which model we want to load in
 @click.command()

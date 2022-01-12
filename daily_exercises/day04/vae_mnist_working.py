@@ -7,11 +7,11 @@ A simple implementation of Gaussian MLP Encoder and Decoder trained on MNIST
 import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
+import wandb
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 from torchvision.utils import save_image
 
-import wandb
 wandb.init(project='day04', entity='jonpo')
 
 # Model Hyperparameters
