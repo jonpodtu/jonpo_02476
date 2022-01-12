@@ -14,21 +14,21 @@ paths:
   figures: "reports/figures"
 
 # Putting the two conf files together to solve issues
-conv1: 
-  in: 1
-  out: 10
-  kernel_size: 5
+# conv1: 
+#   in: 1
+#   out: 10
+#   kernel_size: 5
 
-conv2: 
-  in: 10
-  out: 20
-  kernel_size: 5
+# conv2: 
+#   in: 10
+#   out: 20
+#   kernel_size: 5
 
-fc1: 
-  in: 320
-  out: 50
-  dropout: 0.2
+# fc1: 
+#   in: 320
+#   out: 50
+#   dropout: 0.2
 
-output:
-  in: 50
-  out: 10
+# output:
+#   in: 50
+#   out: 10

@@ -6,15 +6,13 @@ from torch.utils.data import DataLoader, TensorDataset
 import os
 
 import hydra
-from hydra.utils import get_original_cwd, to_absolute_path
+from hydra.utils import to_absolute_path
 from omegaconf import DictConfig, omegaconf
 
 
-@hydra.main(config_path="config", config_name="training_conf")
+@hydra.main(config_path="config", config_name="training_conf.yaml")
 def main(cfg: DictConfig):
     print("Training day and night...")
-
-    model = MyAwesomeModel(cfg)
 
     trainset = TensorDataset(
         torch.load(to_absolute_path(cfg.paths['images'])),
@@ -82,4 +80,6 @@ def main(cfg: DictConfig):
 
 
 if __name__ == "__main__":
+    model = MyAwesomeModel()
+    hydra.core.global_hydra.GlobalHydra.instance().clear()
     main()

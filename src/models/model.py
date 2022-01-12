@@ -3,6 +3,8 @@ from torch import nn
 
 import logging
 log = logging.getLogger(__name__)
+import hydra
+from hydra import compose, initialize
 
 class MyAwesomeModel(nn.Module):
     """
@@ -12,9 +14,13 @@ class MyAwesomeModel(nn.Module):
     translational invariant, which is relevant as we work with
     rotated corrupted data.
     """
-    def __init__(self, cfg):
+    initialize(config_path="config")
+    cfg = compose("model_conf.yaml")
+
+    def __init__(self):
         super().__init__()
 
+        cfg = self.cfg
         # Input layer.
         self.conv1 = nn.Conv2d(cfg.conv1['in'], 
                                cfg.conv1['out'], 
