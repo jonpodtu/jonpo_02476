@@ -50,5 +50,5 @@ class TestClass():
 
             # Compare bias and weights
             for key in before:
-                assert (before[key] != after[key]).any()
+                assert (before[key] != after[key]).any(), "A change in biases and weights where expected, however didn't happen."
             break

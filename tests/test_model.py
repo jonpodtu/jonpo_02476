@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import os
 import unittest
+import pytest
 
 class TestClass(unittest.TestCase):
     # Load data
@@ -32,3 +33,7 @@ class TestClass(unittest.TestCase):
                 self.orig_parameters, list(self.model.parameters())
             ), "The model parameters are not being optimized"
             break
+
+    def test_error_on_wrong_shape(self):
+        with pytest.raises(ValueError, match='Expected input to a 4D tensor'):
+            self.model(torch.randn(1,28,28))
