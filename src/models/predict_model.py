@@ -11,8 +11,6 @@ from torch.utils.data import DataLoader, TensorDataset
 @click.command()
 @click.argument("load_model_from", type=click.Path(exists=True))
 @click.argument("data_images", type=click.Path(exists=True))
-
-
 def main(load_model_from, data_images):
     """
     Tests the given model using the standard testset

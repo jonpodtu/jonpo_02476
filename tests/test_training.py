@@ -9,14 +9,14 @@ from tests import _PATH_DATA
 
 
 @pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
-class TestClass():
+class TestClass:
     # Load data
     tr_images = torch.load(os.path.join(_PATH_DATA, "images_train.pt"))
     tr_labels = torch.load(os.path.join(_PATH_DATA, "labels_train.pt"))
-    train_set = DataLoader(TensorDataset(tr_images, tr_labels),
-                           batch_size=64,
-                           shuffle=True)
-    
+    train_set = DataLoader(
+        TensorDataset(tr_images, tr_labels), batch_size=64, shuffle=True
+    )
+
     model = MyAwesomeModel()
     model.train()
     optimizer = torch.optim.Adam(model.parameters())
@@ -41,7 +41,7 @@ class TestClass():
             before = {}
             for key in self.model.state_dict():
                 before[key] = self.model.state_dict()[key].clone()
-            
+
             self.optimizer.zero_grad()
             output = self.model(images)
             loss = self.criterion(output, labels)
@@ -55,5 +55,7 @@ class TestClass():
 
             # Compare bias and weights
             for key in before:
-                assert (before[key] != after[key]).any(), "A change in biases and weights where expected, however didn't happen."
+                assert (
+                    before[key] != after[key]
+                ).any(), "A change in biases and weights where expected, however didn't happen."
             break

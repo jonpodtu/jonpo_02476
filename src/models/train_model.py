@@ -15,24 +15,24 @@ def main(cfg: DictConfig):
     print("Training day and night...")
 
     trainset = TensorDataset(
-        torch.load(to_absolute_path(cfg.paths['images'])),
-        torch.load(to_absolute_path(cfg.paths['labels'])),
+        torch.load(to_absolute_path(cfg.paths["images"])),
+        torch.load(to_absolute_path(cfg.paths["labels"])),
     )
-    train_set = DataLoader(trainset,
-                           batch_size=cfg.hyperparameters['batch_size'],
-                           shuffle=True)
+    train_set = DataLoader(
+        trainset, batch_size=cfg.hyperparameters["batch_size"], shuffle=True
+    )
     print("The trainingset is {} long!".format(len(trainset)))
     # Criterion: We use the negative log likelihood as our output is logSoftMax
     criterion = torch.nn.NLLLoss()
-    if cfg.hyperparameters['optimizer'].lower() == 'adam':
-        optimizer = optim.Adam(model.parameters(), lr=cfg.hyperparameters['lr'])
-    elif cfg.hyperparameters['optimizer'].lower() == 'sgd':
-        optimizer = optim.SGD(model.parameters(), lr=cfg.hyperparameters['lr'])
+    if cfg.hyperparameters["optimizer"].lower() == "adam":
+        optimizer = optim.Adam(model.parameters(), lr=cfg.hyperparameters["lr"])
+    elif cfg.hyperparameters["optimizer"].lower() == "sgd":
+        optimizer = optim.SGD(model.parameters(), lr=cfg.hyperparameters["lr"])
     else:
-        print('Not a valid optimizer! Please choose \"adam\" or \"sgd\".')
+        print('Not a valid optimizer! Please choose "adam" or "sgd".')
 
     # Epochs and train_loss
-    epochs = cfg.hyperparameters['epochs']
+    epochs = cfg.hyperparameters["epochs"]
     train_loss = []
 
     for e in range(epochs):
@@ -65,12 +65,11 @@ def main(cfg: DictConfig):
         train_loss.append(loss.item())
         print("[%d] loss: %.3f" % (e + 1, running_loss / len(train_set)))
 
-    models_dir = to_absolute_path(cfg.paths['model_save'])
+    models_dir = to_absolute_path(cfg.paths["model_save"])
     os.makedirs(models_dir, exist_ok=True)
-    torch.save(model, 
-               to_absolute_path(os.path.join(models_dir,"trained_model.pt")))
+    torch.save(model, to_absolute_path(os.path.join(models_dir, "trained_model.pt")))
 
-    fig_dir = to_absolute_path(cfg.paths['figures'])
+    fig_dir = to_absolute_path(cfg.paths["figures"])
     os.makedirs(fig_dir, exist_ok=True)
     plt.plot(train_loss, label="Training loss")
     plt.legend()

@@ -6,32 +6,36 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
 
 # Define a transform to normalize the data
-transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5,), (0.5,)),
-                                ])
+transform = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,)),
+    ]
+)
+
 
 def combine_data():
-    data_path = '../data/corruptmnist/'
-    data_all = [np.load('%strain_%s.npz' % (data_path, i)) for i in range(5)]
+    data_path = "../data/corruptmnist/"
+    data_all = [np.load("%strain_%s.npz" % (data_path, i)) for i in range(5)]
 
     merged_data = {}
     for data in data_all:
         [merged_data.update({k: v}) for k, v in data.items()]
-    np.savez('%strain_data.npz' % data_path, **merged_data)    
+    np.savez("%strain_data.npz" % data_path, **merged_data)
 
 
 def mnist():
     # Check if traindata is combined
-    mnist_path = '../data/corruptmnist/'
-    if not os.path.isfile('%strain_data.npz' % mnist_path):
+    mnist_path = "../data/corruptmnist/"
+    if not os.path.isfile("%strain_data.npz" % mnist_path):
         combine_data()
     else:
         try:
-            test = np.load('%stest.npz' % mnist_path)
-            train = np.load('%strain_data.npz' % mnist_path)  
-            print('Successfully imported existing files')
+            test = np.load("%stest.npz" % mnist_path)
+            train = np.load("%strain_data.npz" % mnist_path)
+            print("Successfully imported existing files")
         except OSError:
-            print('Could not load the files')
+            print("Could not load the files")
 
     # Let's reorganize the NPZ files
     images_train = torch.Tensor(train.f.images)

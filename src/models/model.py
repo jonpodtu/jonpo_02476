@@ -16,6 +16,7 @@ class MyAwesomeModel(nn.Module):
     translational invariant, which is relevant as we work with
     rotated corrupted data.
     """
+
     initialize(config_path="config")
     cfg = compose("model_conf.yaml")
 
@@ -24,28 +25,28 @@ class MyAwesomeModel(nn.Module):
 
         cfg = self.cfg
         # Input layer.
-        self.conv1 = nn.Conv2d(cfg.conv1['in'], 
-                               cfg.conv1['out'], 
-                               kernel_size=cfg.conv1['kernel_size'])
+        self.conv1 = nn.Conv2d(
+            cfg.conv1["in"], cfg.conv1["out"], kernel_size=cfg.conv1["kernel_size"]
+        )
 
         # Hidden layer(s)
-        self.conv2 = nn.Conv2d(cfg.conv2['in'], 
-                               cfg.conv2['out'], 
-                               kernel_size=cfg.conv2['kernel_size'])
-        self.fc1_in = cfg.fc1['in']
-        self.fc1 = nn.Linear(self.fc1_in, cfg.fc1['out'])
+        self.conv2 = nn.Conv2d(
+            cfg.conv2["in"], cfg.conv2["out"], kernel_size=cfg.conv2["kernel_size"]
+        )
+        self.fc1_in = cfg.fc1["in"]
+        self.fc1 = nn.Linear(self.fc1_in, cfg.fc1["out"])
 
         # Output layer
-        self.output = nn.Linear(cfg.output['in'], cfg.output['out'])
+        self.output = nn.Linear(cfg.output["in"], cfg.output["out"])
 
         # Dropout module
-        self.dropout = nn.Dropout(p=cfg.fc1['dropout'])
+        self.dropout = nn.Dropout(p=cfg.fc1["dropout"])
 
     def forward(self, x):
         if x.ndim != 4:
-            raise ValueError('Expected input to a 4D tensor')
+            raise ValueError("Expected input to a 4D tensor")
         if x.shape[1] != 1 or x.shape[2] != 28 or x.shape[3] != 28:
-            raise ValueError('Expected each sample to have shape [1, 28, 28]')
+            raise ValueError("Expected each sample to have shape [1, 28, 28]")
         """
         Forward passes the input through multiple convolutional
         and fully connected layers.

@@ -31,18 +31,34 @@ class TestClass:
     # Testing trainingdata
     def test_traindata(self):
         # Image structure
-        assert len(self.tr_images) == self.N_train, "Train data did not have the correct number of images"
-        assert all([img.size() == torch.Size([28, 28]) for img in self.tr_images]), "At least one train image didn't have the right dimensions."
+        assert (
+            len(self.tr_images) == self.N_train
+        ), "Train data did not have the correct number of images"
+        assert all(
+            [img.size() == torch.Size([28, 28]) for img in self.tr_images]
+        ), "At least one train image didn't have the right dimensions."
 
         # Labels
-        assert len(self.tr_labels) == self.N_train, "Train data did not have the correct number of labels"
-        assert all(i in torch.unique(self.tr_labels) for i in range(10)), "At least one train data label wasn't correct."
+        assert (
+            len(self.tr_labels) == self.N_train
+        ), "Train data did not have the correct number of labels"
+        assert all(
+            i in torch.unique(self.tr_labels) for i in range(10)
+        ), "At least one train data label wasn't correct."
 
     def test_testdata(self):
         # Image structure
-        assert len(self.test_images) == self.N_test, "Test data did not have the correct number of images"
-        assert all([img.size() == torch.Size([28, 28]) for img in self.test_images]), "At least one test image didn't have the right dimensions."
+        assert (
+            len(self.test_images) == self.N_test
+        ), "Test data did not have the correct number of images"
+        assert all(
+            [img.size() == torch.Size([28, 28]) for img in self.test_images]
+        ), "At least one test image didn't have the right dimensions."
 
         # Labels
-        assert len(self.test_labels) == self.N_test, "Test data did not have the correct number of labels"
-        assert all(i in torch.unique(self.test_labels) for i in range(10)), "At least one test data label wasn't correct."
+        assert (
+            len(self.test_labels) == self.N_test
+        ), "Test data did not have the correct number of labels"
+        assert all(
+            i in torch.unique(self.test_labels) for i in range(10)
+        ), "At least one test data label wasn't correct."

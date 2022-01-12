@@ -14,10 +14,10 @@ class TestClass(unittest.TestCase):
     # Load data
     tr_images = torch.load(os.path.join(_PATH_DATA, "images_train.pt"))
     tr_labels = torch.load(os.path.join(_PATH_DATA, "labels_train.pt"))
-    train_set = DataLoader(TensorDataset(tr_images, tr_labels),
-                           batch_size=64,
-                           shuffle=True)
-    
+    train_set = DataLoader(
+        TensorDataset(tr_images, tr_labels), batch_size=64, shuffle=True
+    )
+
     model = MyAwesomeModel()
     orig_parameters = list(model.parameters())
     optimizer = torch.optim.Adam(model.parameters())
@@ -39,5 +39,5 @@ class TestClass(unittest.TestCase):
             break
 
     def test_error_on_wrong_shape(self):
-        with pytest.raises(ValueError, match='Expected input to a 4D tensor'):
-            self.model(torch.randn(1,28,28))
+        with pytest.raises(ValueError, match="Expected input to a 4D tensor"):
+            self.model(torch.randn(1, 28, 28))

@@ -10,32 +10,33 @@ from data import mnist
 
 
 class TrainOREvaluate(object):
-    """ Helper class that will help launch class methods as commands
-        from a single script
+    """Helper class that will help launch class methods as commands
+    from a single script
     """
+
     def __init__(self):
         parser = argparse.ArgumentParser(
             description="Script for either training or evaluating",
-            usage="python main.py <command>"
+            usage="python main.py <command>",
         )
         parser.add_argument("command", help="Subcommand to run")
         args = parser.parse_args(sys.argv[1:2])
         if not hasattr(self, args.command):
-            print('Unrecognized command')
-            
+            print("Unrecognized command")
+
             parser.print_help()
             exit(1)
         # use dispatch pattern to invoke method with same name
         getattr(self, args.command)()
-    
+
     def train(self):
         print("Training day and night")
-        parser = argparse.ArgumentParser(description='Training arguments')
-        parser.add_argument('--lr', default=0.1)
+        parser = argparse.ArgumentParser(description="Training arguments")
+        parser.add_argument("--lr", default=0.1)
         # add any additional argument that you want
         args = parser.parse_args(sys.argv[2:])
         print(args)
-        
+
         # TODO: Implement training loop here
         model = MyAwesomeModel()
         train_set, _ = mnist()
@@ -53,7 +54,7 @@ class TrainOREvaluate(object):
             model.train()
             running_loss = 0
 
-            '''
+            """
             The for-loop does the following:
                 We use convolutional network, so first we unsqueeze
                 Resets the gradients
@@ -62,13 +63,12 @@ class TrainOREvaluate(object):
                 2. Use the logits to calculate the loss. We use the computed logits from our output.
                 3. Perform a backward pass through the network with loss.backward() to calculate the gradients
                 4. Take a step with the optimizer to update the weights
-            '''
+            """
 
             for images, labels in train_set:
                 images = images.unsqueeze(1)
                 optimizer.zero_grad()
-                
-                
+
                 output = model(images)
                 loss = criterion(output, labels)
                 loss.backward()
@@ -76,33 +76,33 @@ class TrainOREvaluate(object):
 
                 running_loss += loss.item()
             train_loss.append(loss.item())
-            print('[%d] loss: %.3f' % (e + 1, running_loss / len(train_set)))
-            
-        torch.save(model.state_dict(), 'trained_model.pt')
+            print("[%d] loss: %.3f" % (e + 1, running_loss / len(train_set)))
 
-        plt.plot(train_loss, label = "Training loss")
+        torch.save(model.state_dict(), "trained_model.pt")
+
+        plt.plot(train_loss, label="Training loss")
         plt.legend()
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
         plt.savefig("loss.png")
 
     def evaluate(self):
         print("Evaluating until hitting the ceiling")
-        parser = argparse.ArgumentParser(description='Training arguments')
-        parser.add_argument('load_model_from', default="")
+        parser = argparse.ArgumentParser(description="Training arguments")
+        parser.add_argument("load_model_from", default="")
         # add any additional argument that you want
         args = parser.parse_args(sys.argv[2:])
         print(args)
-        
+
         # TODO: Implement evaluation logic here
         # First we load in the already trained model
         model = MyAwesomeModel()
         state_dict = torch.load(args.load_model_from)
         model.load_state_dict(state_dict)
 
-        # Load in the test set 
+        # Load in the test set
         _, test_set = mnist()
-        
+
         # We ensure our model is set to eval mode and turn of gradient
         # Turning off gradient will improve speed
         model.eval()
@@ -120,16 +120,16 @@ class TrainOREvaluate(object):
                 # Test loss
                 output = model.forward(images)
                 running_loss += criterion(output, labels).item()
-                
+
                 # Test Accuracy
-                ps = (torch.exp(output))
+                ps = torch.exp(output)
                 _, top_class = ps.topk(1, dim=1)
                 equals = top_class == labels.view(*top_class.shape)
                 accuracy = torch.mean(equals.type(torch.FloatTensor))
                 accuracies.append(accuracy.item())
             mean_acc = sum(accuracies) / len(accuracies)
-            print(f'Accuracy: {mean_acc*100}%')
+            print(f"Accuracy: {mean_acc*100}%")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     TrainOREvaluate()
-    
