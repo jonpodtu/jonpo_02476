@@ -3,7 +3,9 @@ from tests import _PATH_DATA
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 import os
+import pytest
 
+@pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
 class TestClass():
     # Load data
     tr_images = torch.load(os.path.join(_PATH_DATA, "images_train.pt"))

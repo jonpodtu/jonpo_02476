@@ -4,6 +4,7 @@ import os
 import numpy as np
 import pytest
 
+@pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
 def dataload():
     # Fetching train
     tr_images = torch.load(os.path.join(_PATH_DATA, "images_train.pt"))
