@@ -3,7 +3,6 @@ import torch
 import os
 import numpy as np
 import pytest
-@pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
 
 def dataload():
     # Fetching train
@@ -19,6 +18,7 @@ def dataload():
 
 
 # Check if data is available, if not -> skip
+@pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
 class TestClass:
     tr_images, tr_labels, test_images, test_labels = dataload()
     N_train = 40000
