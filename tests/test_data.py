@@ -17,6 +17,7 @@ def dataload():
     return tr_images, tr_labels, test_images, test_labels
 
 
+# Check if data is available, if not -> skip
 @pytest.mark.skipif(not os.path.exists(_PATH_DATA), reason="Data files not found")
 class TestClass:
     tr_images, tr_labels, test_images, test_labels = dataload()
