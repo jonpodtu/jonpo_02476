@@ -1,10 +1,8 @@
 import logging
-
 import torch.nn.functional as F
 from torch import nn
 
 log = logging.getLogger(__name__)
-import hydra
 from hydra import compose, initialize
 
 
